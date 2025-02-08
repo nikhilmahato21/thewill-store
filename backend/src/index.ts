@@ -34,7 +34,7 @@ app.use(
 
 app.get(
   "/",
-  asyncHandler((req: Request, res: Response, next: NextFunction) => {
+  asyncHandler(async(req: Request, res: Response, next: NextFunction) => {
     throw new Error("Test Error");
     res.status(HTTPSTATUS.OK).json({
       message: "Hello api",
