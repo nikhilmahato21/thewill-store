@@ -4,6 +4,7 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { config } from "./app.config";
 import { NotFoundException } from "../utils/appError";
 import { ProviderEnum } from "../enums/account-provider.enum";
+import { loginOrCreateAccountService } from "../services/auth.service";
 
 passport.use(
   new GoogleStrategy(
