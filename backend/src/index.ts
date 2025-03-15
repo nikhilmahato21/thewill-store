@@ -58,6 +58,8 @@ app.get(
 app.use(`${BASE_PATH}/auth`, authRoutes);
 app.use(`${BASE_PATH}/user`,isAuthenticated,userRoutes)
 
+console.log("bug check")
+
 app.use(errorHandler);
 app.listen(config.PORT, async () => {
   console.log(`Server listening on port ${config.PORT} in ${config.NODE_ENV}`);
