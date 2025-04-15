@@ -28,19 +28,9 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "../../ui/textarea";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  getAvatarColor,
-  getAvatarFallbackText,
-  transformOptions,
-} from "@/lib/helper";
+import { transformOptions } from "@/lib/helper";
 import useWorkspaceId from "@/hooks/use-workspace-id";
 import { TaskPriorityEnum, TaskStatusEnum } from "@/constant";
-import useGetProjectsInWorkspaceQuery from "@/hooks/api/use-get-projects";
-import useGetWorkspaceMembers from "@/hooks/api/use-get-workspace-members";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { createTaskMutationFn } from "@/lib/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "@/hooks/use-toast";
 
 export default function CreateTaskForm(props: {
   projectId?: string;
@@ -48,55 +38,14 @@ export default function CreateTaskForm(props: {
 }) {
   const { projectId, onClose } = props;
 
-  const queryClient = useQueryClient();
   const workspaceId = useWorkspaceId();
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: createTaskMutationFn,
-  });
+  const isLoading = false;
 
-  const { data, isLoading } = useGetProjectsInWorkspaceQuery({
-    workspaceId,
-    skip: !!projectId,
-  });
-
-  const { data: memberData } = useGetWorkspaceMembers(workspaceId);
-
-  const projects = data?.projects || [];
-  const members = memberData?.members || [];
-
-  //Workspace Projects
-  const projectOptions = projects?.map((project) => {
-    return {
-      label: (
-        <div className="flex items-center gap-1">
-          <span>{project.emoji}</span>
-          <span>{project.name}</span>
-        </div>
-      ),
-      value: project._id,
-    };
-  });
+  //const projectOptions = []
 
   // Workspace Memebers
-  const membersOptions = members?.map((member) => {
-    const name = member.userId?.name || "Unknown";
-    const initials = getAvatarFallbackText(name);
-    const avatarColor = getAvatarColor(name);
-
-    return {
-      label: (
-        <div className="flex items-center space-x-2">
-          <Avatar className="h-7 w-7">
-            <AvatarImage src={member.userId?.profilePicture || ""} alt={name} />
-            <AvatarFallback className={avatarColor}>{initials}</AvatarFallback>
-          </Avatar>
-          <span>{name}</span>
-        </div>
-      ),
-      value: member.userId._id,
-    };
-  });
+  //const membersOptions = []
 
   const formSchema = z.object({
     title: z.string().trim().min(1, {
@@ -142,41 +91,8 @@ export default function CreateTaskForm(props: {
   const priorityOptions = transformOptions(taskPriorityList);
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    if (isPending) return;
-    const payload = {
-      workspaceId,
-      projectId: values.projectId,
-      data: {
-        ...values,
-        dueDate: values.dueDate.toISOString(),
-      },
-    };
-
-    mutate(payload, {
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: ["project-analytics", projectId],
-        });
-
-        queryClient.invalidateQueries({
-          queryKey: ["all-tasks", workspaceId],
-        });
-
-        toast({
-          title: "Success",
-          description: "Task created successfully",
-          variant: "success",
-        });
-        onClose();
-      },
-      onError: (error) => {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
-      },
-    });
+    console.log(values, { workspaceId: workspaceId });
+    onClose();
   };
 
   return (
@@ -264,21 +180,15 @@ export default function CreateTaskForm(props: {
                               <Loader className="w-4 h-4 place-self-center flex animate-spin" />
                             </div>
                           )}
-                          <div
-                            className="w-full max-h-[200px]
-                           overflow-y-auto scrollbar
-                          "
-                          >
-                            {projectOptions?.map((option) => (
-                              <SelectItem
-                                key={option.value}
-                                className="!capitalize cursor-pointer"
-                                value={option.value}
-                              >
-                                {option.label}
-                              </SelectItem>
-                            ))}
-                          </div>
+                          <SelectItem value="m@example.com">
+                            m@example.com
+                          </SelectItem>
+                          <SelectItem value="m@google.com">
+                            m@google.com
+                          </SelectItem>
+                          <SelectItem value="m@support.com">
+                            m@support.com
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -307,21 +217,15 @@ export default function CreateTaskForm(props: {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <div
-                          className="w-full max-h-[200px]
-                           overflow-y-auto scrollbar
-                          "
-                        >
-                          {membersOptions?.map((option) => (
-                            <SelectItem
-                              className="cursor-pointer"
-                              key={option.value}
-                              value={option.value}
-                            >
-                              {option.label}
-                            </SelectItem>
-                          ))}
-                        </div>
+                        <SelectItem value="m@example.com">
+                          m@example.com
+                        </SelectItem>
+                        <SelectItem value="m@google.com">
+                          m@google.com
+                        </SelectItem>
+                        <SelectItem value="m@support.com">
+                          m@support.com
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -457,9 +361,8 @@ export default function CreateTaskForm(props: {
             <Button
               className="flex place-self-end  h-[40px] text-white font-semibold"
               type="submit"
-              disabled={isPending}
             >
-              {isPending && <Loader className="animate-spin" />}
+              <Loader className="animate-spin" />
               Create
             </Button>
           </form>

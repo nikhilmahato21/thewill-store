@@ -13,25 +13,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "../ui/textarea";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createWorkspaceMutationFn } from "@/lib/api";
-import { useNavigate } from "react-router-dom";
-import { toast } from "@/hooks/use-toast";
-import { Loader } from "lucide-react";
 
-export default function CreateWorkspaceForm({
-  onClose,
-}: {
-  onClose: () => void;
-}) {
-  const navigate = useNavigate();
-
-  const queryClient = useQueryClient();
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: createWorkspaceMutationFn,
-  });
-
+export default function CreateWorkspaceForm() {
   const formSchema = z.object({
     name: z.string().trim().min(1, {
       message: "Workspace name is required",
@@ -48,25 +31,7 @@ export default function CreateWorkspaceForm({
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    if (isPending) return;
-    mutate(values, {
-      onSuccess: (data) => {
-        queryClient.resetQueries({
-          queryKey: ["userWorkspaces"],
-        });
-
-        const workspace = data.workspace;
-        onClose();
-        navigate(`/workspace/${workspace._id}`);
-      },
-      onError: (error) => {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
-      },
-    });
+    console.log(values);
   };
 
   return (
@@ -140,11 +105,9 @@ export default function CreateWorkspaceForm({
             </div>
 
             <Button
-              disabled={isPending}
               className="w-full h-[40px] text-white font-semibold"
               type="submit"
             >
-              {isPending && <Loader className="animate-spin" />}
               Create Workspace
             </Button>
           </form>
