@@ -1,13 +1,18 @@
 import GoogleOAuthFailure from "@/page/auth/GoogleOAuthFailure";
 import SignIn from "@/page/auth/Sign-in";
 import SignUp from "@/page/auth/Sign-up";
-import WorkspaceDashboard from "@/page/workspace/Dashboard";
-import Members from "@/page/workspace/Members";
-import ProjectDetails from "@/page/workspace/ProjectDetails";
-import Settings from "@/page/workspace/Settings";
-import Tasks from "@/page/workspace/Tasks";
+import Account from "@/page/account/Account";
+import Orders from "@/page/account/Orders";
+import OrderDetails from "@/page/account/OrderDetails";
+import Cart from "@/page/cart/Cart";
+import Checkout from "@/page/checkout/Checkout";
+import Wishlist from "@/page/account/Wishlist";
+import Profile from "@/page/account/Profile";
+import ProductDetails from "@/page/product/ProductDetails";
+import Category from "@/page/category/Category";
+import Home from "@/page/Home";
 import { AUTH_ROUTES, BASE_ROUTE, PROTECTED_ROUTES } from "./routePaths";
-import InviteUser from "@/page/invite/InviteUser";
+import Dashboard from "@/page/workspace/Dashboard";
 
 export const authenticationRoutePaths = [
   { path: AUTH_ROUTES.SIGN_IN, element: <SignIn /> },
@@ -16,13 +21,18 @@ export const authenticationRoutePaths = [
 ];
 
 export const protectedRoutePaths = [
-  { path: PROTECTED_ROUTES.WORKSPACE, element: <WorkspaceDashboard /> },
-  { path: PROTECTED_ROUTES.TASKS, element: <Tasks /> },
-  { path: PROTECTED_ROUTES.MEMBERS, element: <Members /> },
-  { path: PROTECTED_ROUTES.SETTINGS, element: <Settings /> },
-  { path: PROTECTED_ROUTES.PROJECT_DETAILS, element: <ProjectDetails /> },
+    { path: PROTECTED_ROUTES.DASHBOARD, element: <Dashboard/> },
+  { path: PROTECTED_ROUTES.ACCOUNT, element: <Account /> },
+  { path: PROTECTED_ROUTES.ORDERS, element: <Orders /> },
+  { path: PROTECTED_ROUTES.ORDER_DETAILS, element: <OrderDetails /> },
+  { path: PROTECTED_ROUTES.CART, element: <Cart /> },
+  { path: PROTECTED_ROUTES.CHECKOUT, element: <Checkout /> },
+  { path: PROTECTED_ROUTES.WISHLIST, element: <Wishlist /> },
+  { path: PROTECTED_ROUTES.PROFILE, element: <Profile /> },
 ];
 
 export const baseRoutePaths = [
-  { path: BASE_ROUTE.INVITE_URL, element: <InviteUser /> },
+  { path: BASE_ROUTE.PRODUCT_DETAILS, element: <ProductDetails /> },
+  { path: BASE_ROUTE.CATEGORY, element: <Category /> },
+  { path: BASE_ROUTE.HOME, element: <Home /> },
 ];

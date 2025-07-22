@@ -3,19 +3,24 @@ export const isAuthRoute = (pathname: string): boolean => {
 };
 
 export const AUTH_ROUTES = {
-  SIGN_IN: "/",
+  SIGN_IN: "/sign-in",
   SIGN_UP: "/sign-up",
-  GOOGLE_OAUTH_CALLBACK: "/google/oauth/callback",
+  GOOGLE_OAUTH_CALLBACK: "/auth/google/callback",
 };
 
 export const PROTECTED_ROUTES = {
-  WORKSPACE: "/workspace/:workspaceId",
-  TASKS: "/workspace/:workspaceId/tasks",
-  MEMBERS: "/workspace/:workspaceId/members",
-  SETTINGS: "/workspace/:workspaceId/settings",
-  PROJECT_DETAILS: "/workspace/:workspaceId/project/:projectId",
+  DASHBOARD: "/dashboard",
+  ACCOUNT: "/account",
+  ORDERS: "/account/orders",
+  ORDER_DETAILS: "/account/orders/:orderId",
+  CART: "/cart",
+  CHECKOUT: "/checkout",
+  WISHLIST: "/wishlist",
+  PROFILE: "/account/profile",
 };
 
 export const BASE_ROUTE = {
-  INVITE_URL: "/invite/workspace/:inviteCode/join",
+  PRODUCT_DETAILS: "/product/:productId",
+  CATEGORY: "/category/:categoryId",
+  HOME: "/",
 };

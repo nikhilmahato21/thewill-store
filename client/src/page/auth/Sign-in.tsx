@@ -35,7 +35,7 @@ const SignIn = () => {
   });
   const formSchema = z.object({
     email: z.string().trim().email("Invalid email address").min(1, {
-      message: "Workspace name is required",
+      message: "Email is required",
     }),
     password: z.string().trim().min(1, {
       message: "Password is required",
@@ -52,16 +52,17 @@ const SignIn = () => {
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     if (isPending) return;
+    console.log(values);
     mutate(values, {
       onSuccess: (data) => {
-        const user = data.user;
-        const decodedUrl = returnUrl ? decodeURIComponent(returnUrl) : null;
-
-        navigate(decodedUrl || `/workspace/${user.currentWorkspace}`);
+        // Always redirect to dashboard after login
+        console.log("Login successful:", data);
+        
+        navigate("/account");
       },
       onError: (error) => {
         toast({
-          title: "Error",
+          title: "Login Error",
           description: error.message,
           variant: "destructive",
         });

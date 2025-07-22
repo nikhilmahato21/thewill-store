@@ -1,32 +1,28 @@
 import { NextFunction, Request, Response } from "express";
 import { asyncHandler } from "../middlewares/asyncHandler.middleware";
-
 import passport from "passport";
 import { config } from "../config/app.config";
 import { registerSchema } from "../validation/auth.validation";
 import { HTTPSTATUS } from "../config/http.config";
-import { registerUserService } from "../services/auth.service";
+import { registerUserService, verifyUserService } from "../services/auth.service";
 
+// Google OAuth callback for customer login
 export const googleLoginCallback = asyncHandler(
   async (req: Request, res: Response) => {
-    const currentWorkspace = req.user?.currentWorkspace;
-
-    if (!currentWorkspace) {
+    if (!req.user) {
       return res.redirect(
         `${config.FRONTEND_GOOGLE_CALLBACK_URL}?status=failure`
       );
     }
-
-    return res.redirect(
-      `${config.FRONTEND_ORIGIN}/workspace/${currentWorkspace}`
-    );
+    // Redirect to customer dashboard or homepage after login
+    return res.redirect(`${config.FRONTEND_ORIGIN}/dashboard`);
   }
 );
 
+// Customer registration
 export const registerUserController = asyncHandler(
   async (req: Request, res: Response) => {
     const body = registerSchema.parse({ ...req.body });
-
     await registerUserService(body);
 
     return res.status(HTTPSTATUS.CREATED).json({
@@ -35,6 +31,7 @@ export const registerUserController = asyncHandler(
   }
 );
 
+// Customer login (local strategy)
 export const loginController = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     passport.authenticate(
@@ -68,6 +65,8 @@ export const loginController = asyncHandler(
     )(req, res, next);
   }
 );
+
+// Customer logout
 export const logOutController = asyncHandler(
   async (req: Request, res: Response) => {
     req.logout((err) => {
