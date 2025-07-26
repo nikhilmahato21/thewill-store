@@ -10,6 +10,8 @@ export const AUTH_ROUTES = {
 
 export const PROTECTED_ROUTES = {
   DASHBOARD: "/dashboard",
+  
+  ADD_PRODUCT: "/add-product",
   ACCOUNT: "/account",
   ORDERS: "/account/orders",
   ORDER_DETAILS: "/account/orders/:orderId",

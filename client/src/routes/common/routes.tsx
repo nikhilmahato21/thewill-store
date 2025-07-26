@@ -13,6 +13,7 @@ import Category from "@/page/category/Category";
 import Home from "@/page/Home";
 import { AUTH_ROUTES, BASE_ROUTE, PROTECTED_ROUTES } from "./routePaths";
 import Dashboard from "@/page/workspace/Dashboard";
+import AddProduct from "@/page/product/AddProduct";
 
 export const authenticationRoutePaths = [
   { path: AUTH_ROUTES.SIGN_IN, element: <SignIn /> },
@@ -22,6 +23,7 @@ export const authenticationRoutePaths = [
 
 export const protectedRoutePaths = [
     { path: PROTECTED_ROUTES.DASHBOARD, element: <Dashboard/> },
+        { path: PROTECTED_ROUTES.ADD_PRODUCT, element: <AddProduct /> },
   { path: PROTECTED_ROUTES.ACCOUNT, element: <Account /> },
   { path: PROTECTED_ROUTES.ORDERS, element: <Orders /> },
   { path: PROTECTED_ROUTES.ORDER_DETAILS, element: <OrderDetails /> },
