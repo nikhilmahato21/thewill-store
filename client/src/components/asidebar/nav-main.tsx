@@ -44,7 +44,8 @@ export function NavMain() {
   const workspaceId = useWorkspaceId();
   const location = useLocation();
   const pathname = location.pathname;
-  const [openSection, setOpenSection] = useState<string | null>(null);
+  const [openSections, setOpenSections] = useState<string[]>([]);
+
 
   const items: SidebarItem[] = [
     {
@@ -67,7 +68,7 @@ export function NavMain() {
       title: "Category",
       icon: FolderOpen,
       children: [
-        { title: "List", url: "/category", icon: List },
+        { title: "List", url: "/all-categories", icon: List },
         { title: "Add", url: "/category/add", icon: CirclePlus },
       ],
     },
@@ -117,7 +118,12 @@ export function NavMain() {
                 <SidebarMenuButton
                   isActive={item.children.some((child) => child.url === pathname)}
                   onClick={() =>
-                    setOpenSection(openSection === item.title ? null : item.title)
+                    setOpenSections((prev) =>
+  prev.includes(item.title)
+    ? prev.filter((title) => title !== item.title) // remove (close)
+    : [...prev, item.title] // add (open)
+)
+
                   }
                   style={{ justifyContent: "space-between" }}
                 >
@@ -127,7 +133,7 @@ export function NavMain() {
                   </span>
                   <span>
                     <span>
-  {openSection === item.title ? (
+  {openSections.includes(item.title )? (
     <ChevronUp className="h-4 w-4 ml-1 text-muted-foreground" />
   ) : (
     <ChevronDown className="h-4 w-4 ml-1 text-muted-foreground" />
@@ -137,13 +143,14 @@ export function NavMain() {
                   </span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-              {openSection === item.title && (
+              {openSections.includes(item.title ) && (
                 <div className="ml-8">
                   {item.children.map((child) => (
                     <SidebarMenuItem key={child.title}>
                       <SidebarMenuButton
                         isActive={child.url === pathname}
                         asChild
+                        
                         style={{ fontWeight: 400, fontSize: "15px" }}
                       >
                         <Link to={child.url}>{child.title}</Link>

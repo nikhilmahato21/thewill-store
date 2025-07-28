@@ -154,7 +154,7 @@ const AddProduct = () => {
             ))}
             {images.length < 4 && (
               <div
-                className="flex flex-col items-center justify-center w-36  h-44 border-2 border-dashed rounded cursor-pointer text-muted-foreground p-2 text-center "
+                className="flex flex-col items-center justify-center w-36  h-44 border-2 border-dashed border-gray-300 rounded cursor-pointer text-muted-foreground p-2 text-center "
                 onDrop={handleDrop}
                 onDragOver={(e) => e.preventDefault()}
               >

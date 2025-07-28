@@ -1,8 +1,7 @@
 import { Plus } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-
-import CreateSubcategoryForm from "@/components/admin/products/create-subcategory-form";
+import CreateTaskForm from "./create-subcategory-form";
 
 const CreateTaskDialog = (props: { projectId?: string }) => {
   return (
@@ -11,11 +10,11 @@ const CreateTaskDialog = (props: { projectId?: string }) => {
         <DialogTrigger>
           <Button>
             <Plus />
-            Create Subcategory
+            New Task
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-lg max-h-auto my-5 border-0">
-          <CreateSubcategoryForm  />
+          <CreateTaskForm projectId={props.projectId} />
         </DialogContent>
       </Dialog>
     </div>
