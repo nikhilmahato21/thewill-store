@@ -11,23 +11,25 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 
 import { MultiSelect } from "@/components/ui/multi-select";
+
+
 import CreateAttributeDialog from "./create-attribue-dialog";
 
-// Schema with conditional validation
+// Main subcategory schema
 const formSchema = z.object({
-  isSubcategory: z.boolean().default(true),
-  name: z.string().min(1, "Subcategory name is required").optional(),
   categoryIds: z.array(z.string()).min(1, "Select at least one category"),
+  name: z.string().min(1, "Subcategory name is required"),
   attributes: z.array(z.string()).optional(),
 });
-
 type FormValues = z.infer<typeof formSchema>;
 
+
+
 export default function CreateSubcategoryForm() {
-  const attributeOptions = [
+ 
+  const attributeOptions= [
     { label: "Color", value: "color" },
     { label: "Size", value: "size" },
     { label: "Material", value: "material" },
@@ -39,17 +41,19 @@ export default function CreateSubcategoryForm() {
     { label: "Footwear", value: "footwear" },
   ];
 
+  // Main form for creating subcategory
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      isSubcategory: true,
-      name: "",
       categoryIds: [],
+      name: "",
       attributes: [],
     },
   });
 
-  const isSubcategory = form.watch("isSubcategory");
+  
+
+  
 
   const onSubmit = (values: FormValues) => {
     console.log("Subcategory Data", values);
@@ -61,64 +65,42 @@ export default function CreateSubcategoryForm() {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          {/* Add as Subcategory Checkbox */}
+          {/* Categories */}
           <FormField
             control={form.control}
-            name="isSubcategory"
+            name="categoryIds"
             render={({ field }) => (
-              <FormItem className="flex items-center space-x-2">
+              <FormItem>
+                <FormLabel>Categories</FormLabel>
                 <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
+                  <MultiSelect
+                    options={categoryOptions}
+                    defaultValue={field.value || []}
+                    onValueChange={field.onChange}
+                    placeholder="Select categories"
                   />
                 </FormControl>
-                <FormLabel className="m-0">Add as subcategory</FormLabel>
+                <FormMessage />
               </FormItem>
             )}
           />
 
-          {/* Conditional Fields */}
-          {isSubcategory && (
-            <>
-              {/* Subcategory Name */}
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Subcategory Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter subcategory name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+          {/* Subcategory Name */}
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Subcategory Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="e.g. T-Shirts" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-              {/* Parent Category */}
-              <FormField
-                control={form.control}
-                name="categoryIds"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Parent Category</FormLabel>
-                    <FormControl>
-                      <MultiSelect
-                        options={categoryOptions}
-                        defaultValue={field.value || []}
-                        onValueChange={field.onChange}
-                        placeholder="Select category"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </>
-          )}
-
-          {/* Attributes */}
+          {/* Assign Attributes */}
           <FormField
             control={form.control}
             name="attributes"
@@ -138,8 +120,8 @@ export default function CreateSubcategoryForm() {
             )}
           />
 
-          {/* Add Attribute Modal */}
-          <CreateAttributeDialog />
+          {/* Add New Attribute Modal */}
+          <CreateAttributeDialog/>
 
           {/* Submit Button */}
           <Button type="submit" className="w-full">
