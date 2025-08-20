@@ -1,10 +1,11 @@
-import API from "./axios-client";
+import { API, ECOM_API } from "./axios-client";
 import {
   CurrentUserResponseType,
   LoginResponseType,
   loginType,
 } from "@/types/api.type";
 
+// Use API for existing functions
 export const loginMutationFn = async (
   data: loginType
 ): Promise<LoginResponseType> => {
@@ -65,3 +66,9 @@ export const createTaskMutationFn = async () => {};
 export const getAllTasksQueryFn = async () => {};
 
 export const deleteTaskMutationFn = async () => {};
+
+// Use ECOM_API for e-commerce functions
+export const getProductsQueryFn = async () => {
+  const response = await ECOM_API.get("/products");
+  return response.data;
+};

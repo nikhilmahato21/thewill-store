@@ -5,8 +5,7 @@ import { useParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
-import { DataTableFacetedFilter } from "./table/table-faceted-filter";
-import { priorities, statuses } from "./table/data";
+
 import useTaskTableFilter from "@/hooks/use-task-table-filter";
 
 type Filters = ReturnType<typeof useTaskTableFilter>[0];

@@ -10,11 +10,37 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
-import { CalendarIcon, Upload } from "lucide-react";
+import { ChevronsUpDown, CalendarIcon, Upload } from "lucide-react";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
-const categories = ["Shoes", "Clothing", "Accessories"];
+// Example categories structure (replace with your real data if needed)
+const categories = [
+  {
+    name: "Clothing",
+    subcategories: ["Shirts", "Jeans", "Jackets"],
+  },
+  {
+    name: "Electronics",
+    subcategories: ["Shirts", "Mobiles"],
+  },
+  {
+    name: "Footwear",
+    subcategories: ["Sneakers", "Sandals"],
+  },
+];
 const brands = ["Nike", "Adidas", "Puma"];
-const genders = ["Male", "Female", "Unisex"];
 const sizes = [
   "EU - 44",
   "EU - 38.5",
@@ -29,6 +55,9 @@ const AddProduct = () => {
   const [images, setImages] = useState<File[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [date, setDate] = useState<Date | undefined>();
+  const [categoryOpen, setCategoryOpen] = useState(false);
+  const [categoryValue, setCategoryValue] = useState("");
+  const [categorySearch, setCategorySearch] = useState("");
 
   // Image upload handler
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,36 +108,55 @@ const AddProduct = () => {
               <label className="font-medium text-sm mb-1 block">
                 Category <span className="text-red-500">*</span>
               </label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Choose category" />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.map((cat) => (
-                    <SelectItem key={cat} value={cat}>
-                      {cat}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Popover open={categoryOpen} onOpenChange={setCategoryOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={categoryOpen}
+                    className="w-full justify-between text-muted-foreground font-normal"
+                  >
+                    {categoryValue || "Select category or subcategory..."}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
+                  <Command>
+                    <CommandInput
+                      placeholder="Search..."
+                      className="h-9"
+                      value={categorySearch}
+                      onValueChange={setCategorySearch}
+                    />
+                    <CommandList>
+                      <CommandEmpty>No result found.</CommandEmpty>
+                      {categories.map((cat) => (
+                        <CommandGroup key={cat.name} heading={cat.name}>
+                          
+                          {cat.subcategories.map((sub) => {
+                            const subValue = `${cat.name}-${sub}`;
+                            return (
+                              <CommandItem
+                                key={subValue}
+                                value={subValue}
+                                onSelect={(currentValue) => {
+                                  setCategoryValue(currentValue === categoryValue ? "" : currentValue);
+                                  setCategoryOpen(false);
+                                }}
+                                className="pl-6"
+                              >
+                                {sub}
+                              </CommandItem>
+                            );
+                          })}
+                        </CommandGroup>
+                      ))}
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
             </div>
-            <div className="flex-1">
-              <label className="font-medium text-sm mb-1 block">
-                Gender <span className="text-red-500">*</span>
-              </label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select gender" />
-                </SelectTrigger>
-                <SelectContent>
-                  {genders.map((g) => (
-                    <SelectItem key={g} value={g}>
-                      {g}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            {/* Removed Gender selection */}
           </div>
           <div>
             <label className="font-medium text-sm mb-1 block">

@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Upload } from "lucide-react";
+import { Upload, Check, ChevronsUpDown } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-
-import { Check, ChevronsUpDown } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 import {
   Command,
@@ -15,12 +13,13 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
+
 const categories = [
   {
     name: "Clothing",
@@ -36,13 +35,12 @@ const categories = [
   },
 ];
 
-
 const CreateCategory = () => {
   const [images, setImages] = useState<File[]>([]);
   const [isSubcategory, setIsSubcategory] = useState(false);
- 
-   const [open, setOpen] = useState(false)
-  const [value, setValue] = useState("")
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -62,7 +60,8 @@ const CreateCategory = () => {
       <div className="items-center justify-between p-6">
         <h2 className="text-2xl font-bold">New Category</h2>
         <p className="text-muted-foreground">
-          This category will be used to organize your products. Please ensure the name is unique and meaningful.
+          This category will be used to organize your products. Please ensure
+          the name is unique and meaningful.
         </p>
       </div>
 
@@ -73,7 +72,9 @@ const CreateCategory = () => {
             <Checkbox
               id="is-subcategory"
               checked={isSubcategory}
-              onCheckedChange={(checked) => setIsSubcategory(Boolean(checked))}
+              onCheckedChange={(checked) =>
+                setIsSubcategory(Boolean(checked))
+              }
             />
             <Label htmlFor="is-subcategory">Add as subcategory</Label>
           </div>
@@ -84,7 +85,13 @@ const CreateCategory = () => {
               {isSubcategory ? "Subcategory Name" : "Category Name"}{" "}
               <span className="text-red-500">*</span>
             </label>
-            <Input placeholder={isSubcategory ? "Enter subcategory name" : "Enter category name"} />
+            <Input
+              placeholder={
+                isSubcategory
+                  ? "Enter subcategory name"
+                  : "Enter category name"
+              }
+            />
           </div>
 
           {/* Smooth Reveal: Parent Category Select */}
@@ -101,85 +108,87 @@ const CreateCategory = () => {
                 Parent Category <span className="text-red-500">*</span>
               </label>
               <Popover open={open} onOpenChange={setOpen}>
-  <PopoverTrigger asChild>
-    <Button
-      variant="outline"
-      role="combobox"
-      aria-expanded={open}
-      className="w-full justify-between text-muted-foreground font-normal "
-    >
-      {value || "Select category or subcategory..."}
-      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-    </Button>
-  </PopoverTrigger>
-  <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
-    <Command>
-      <CommandInput placeholder="Search..." className="h-9" />
-      <CommandList>
-        <CommandEmpty>No result found.</CommandEmpty>
-        {categories.map((cat) => (
-          
-          <CommandGroup key={cat.name} heading={cat.name}>
-            {/* Category itself as selectable */}
-            <CommandItem
-  value={cat.name}
-  onSelect={(currentValue) => {
-    setValue(currentValue === value ? "" : currentValue);
-    setOpen(false);
-  }}
-  className={cn(
-    "text-muted-foreground px-2 py-1.5 text-xs font-medium  tracking-wide", // mimic CommandLabel
-    "hover:bg-transparent hover:cursor-pointer",
-    "flex justify-between items-center"
-  )}
->
-  {cat.name}
-  <Check
-    className={cn(
-      "ml-auto h-4 w-4",
-      value === cat.name ? "opacity-100" : "opacity-0"
-    )}
-  />
-</CommandItem>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={open}
+                    className="w-full justify-between text-muted-foreground font-normal"
+                  >
+                    {value || "Select category or subcategory..."}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
+                  <Command>
+                    <CommandInput placeholder="Search..." className="h-9" />
+                    <CommandList>
+                      <CommandEmpty>No result found.</CommandEmpty>
+                      {categories.map((cat) => (
+                        <CommandGroup key={cat.name}>
+                          {/* Category as selectable (styled like a heading) */}
+                          <CommandItem
+                            value={cat.name}
+                            onSelect={(currentValue) => {
+                              setValue(
+                                currentValue === value ? "" : currentValue
+                              );
+                              setOpen(false);
+                            }}
+                            className="text-muted-foreground px-2 py-1.5 text-xs font-medium tracking-wide flex justify-between items-center"
+                          >
+                            {cat.name}
+                            <Check
+                              className={cn(
+                                "ml-auto h-4 w-4",
+                                value === cat.name
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                          </CommandItem>
 
-
-            {/* Subcategories */}
-            {cat.subcategories.map((sub) => {
-  const subValue = `${cat.name}-${sub}`;
-  return (
-    <CommandItem
-      key={subValue}
-      value={subValue}
-      onSelect={(currentValue) => {
-        setValue(currentValue === value ? "" : currentValue);
-        setOpen(false);
-      }}
-    >
-      {sub}
-      <Check
-        className={cn(
-          "ml-auto h-4 w-4",
-          value === subValue ? "opacity-100" : "opacity-0"
-        )}
-      />
-    </CommandItem>
-  );
-})}
-
-          </CommandGroup>
-        ))}
-      </CommandList>
-    </Command>
-  </PopoverContent>
-                </Popover>
-
-
+                          {/* Subcategories */}
+                          {cat.subcategories.map((sub) => {
+                            const subValue = `${cat.name}-${sub}`;
+                            return (
+                              <CommandItem
+                                key={subValue}
+                                value={subValue}
+                                onSelect={(currentValue) => {
+                                  setValue(
+                                    currentValue === value
+                                      ? ""
+                                      : currentValue
+                                  );
+                                  setOpen(false);
+                                }}
+                                className="pl-6"
+                              >
+                                {sub}
+                                <Check
+                                  className={cn(
+                                    "ml-auto h-4 w-4",
+                                    value === subValue
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                              </CommandItem>
+                            );
+                          })}
+                        </CommandGroup>
+                      ))}
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
 
           {/* Upload Images */}
-          <div className="transition-all duration-300 ease-in-out" >
-            <label className="block text-sm font-semibold mb-2 ">
+          <div className="transition-all duration-300 ease-in-out">
+            <label className="block text-sm font-semibold mb-2">
               Upload images <span className="text-red-500">*</span>
             </label>
             <div
@@ -190,8 +199,10 @@ const CreateCategory = () => {
               <label className="flex flex-col items-center justify-center gap-2 w-full h-full cursor-pointer">
                 <Upload className="text-gray-500" />
                 <span>
-                  Drop your images here or select{" "}
-                  <span className="text-gray-500 underline">click to browse</span>
+                  Drop your images here or{" "}
+                  <span className="text-gray-500 underline">
+                    click to browse
+                  </span>
                 </span>
                 <Input
                   type="file"

@@ -1,28 +1,27 @@
 import axios from "axios";
 
-const baseURL = import.meta.env.VITE_API_BASE_URL;
+const createAPIClient = (baseURL: string) => {
+  const options = {
+    baseURL,
+    withCredentials: true,
+    timeout: 10000,
+  };
 
-const options = {
-  baseURL,
-  withCredentials: true,
-  timeout: 10000,
+  const client = axios.create(options);
+
+  client.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const { data, status } = error.response;
+      if (data === "Unauthorized" && status === 401) {
+        window.location.href = "/";
+      }
+      return Promise.reject({ ...data });
+    }
+  );
+
+  return client;
 };
 
-const API = axios.create(options);
-
-API.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  async (error) => {
-    const { data, status } = error.response;
-    if (data === "Unauthorized" && status === 401) {
-      window.location.href = "/";
-    }
-    return Promise.reject({
-      ...data,
-    });
-  }
-);
-
-export default API;
+export const API = createAPIClient(import.meta.env.VITE_API_BASE_URL);
+export const ECOM_API = createAPIClient(import.meta.env.VITE_ECOM_API_URL);
