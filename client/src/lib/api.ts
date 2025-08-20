@@ -1,5 +1,6 @@
 import { API, ECOM_API } from "./axios-client";
 import {
+  CategoryType,
   CurrentUserResponseType,
   LoginResponseType,
   loginType,
@@ -23,52 +24,37 @@ export const getCurrentUserQueryFn =
     return response.data;
   };
 
-//********* WORKSPACE ****************
-//************* */
 
-export const createWorkspaceMutationFn = async () => {};
-
-export const editWorkspaceMutationFn = async () => {};
-
-export const getWorkspaceByIdQueryFn = async () => {};
-
-export const getAllWorkspacesUserIsMemberQueryFn = () => {};
-
-export const getWorkspaceAnalyticsQueryFn = async () => {};
-
-export const changeWorkspaceMemberRoleMutationFn = async () => {};
-
-export const deleteWorkspaceMutationFn = async () => {};
-
-//*******MEMBER ****************
-
-export const invitedUserJoinWorkspaceMutationFn = async () => {};
-
-//********* */
-//********* PROJECTS
-export const createProjectMutationFn = async () => {};
-
-export const editProjectMutationFn = async () => {};
-
-export const getProjectsInWorkspaceQueryFn = async () => {};
-
-export const getProjectByIdQueryFn = async () => {};
-
-export const getProjectAnalyticsQueryFn = async () => {};
-
-export const deleteProjectMutationFn = async () => {};
-
-//*******TASKS ********************************
-//************************* */
-
-export const createTaskMutationFn = async () => {};
-
-export const getAllTasksQueryFn = async () => {};
-
-export const deleteTaskMutationFn = async () => {};
 
 // Use ECOM_API for e-commerce functions
 export const getProductsQueryFn = async () => {
   const response = await ECOM_API.get("/products");
   return response.data;
+};
+
+export const getAllCategoriesQueryFn = async (): Promise<CategoryType[]> => {
+  try {
+    const response = await ECOM_API.get("/public/category/all-categories"); // Use ECOM_API instead of fetch
+    const data = response.data;
+    
+    // If your API returns { data: CategoryType[] }
+    if (data.data && Array.isArray(data.data)) {
+      return data.data;
+    }
+    
+    // If your API returns { categories: CategoryType[] }
+    if (data.categories && Array.isArray(data.categories)) {
+      return data.categories;
+    }
+    
+    // If your API returns CategoryType[] directly
+    if (Array.isArray(data)) {
+      return data;
+    }
+    
+    return [];
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    throw error;
+  }
 };

@@ -12,19 +12,23 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ConfirmDialog } from "@/components/resuable/confirm-dialog";
-import { TaskType } from "@/types/api.type";
+import { TaskType, CategoryType } from "@/types/api.type";
 
 interface DataTableRowActionsProps {
-  row: Row<TaskType>;
+  row: Row<TaskType | CategoryType>;
 }
 
 export function DataTableRowActions({ row }: DataTableRowActionsProps) {
-  const [openDeleteDialog, setOpenDialog] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-  const taskId = row.original._id as string;
-  const taskCode = row.original.taskCode;
+  const handleEdit = () => {
+    console.log("Edit item:", row.original);
+  };
 
-  const handleConfirm = () => {};
+  const handleDelete = () => {
+    console.log("Delete item:", row.original);
+    setIsDeleteDialogOpen(false);
+  };
 
   return (
     <>
@@ -34,34 +38,30 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
             variant="ghost"
             className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
           >
-            <MoreHorizontal />
+            <MoreHorizontal className="h-4 w-4" />
             <span className="sr-only">Open menu</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
-          <DropdownMenuItem className="cursor-pointer">
-            Edit Task
-          </DropdownMenuItem>
+          <DropdownMenuItem onClick={handleEdit}>Edit</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            className={`!text-destructive cursor-pointer ${taskId}`}
-            onClick={() => setOpenDialog(true)}
+            className="text-red-600"
+            onClick={() => setIsDeleteDialogOpen(true)}
           >
-            Delete Task
+            Delete
             <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
       <ConfirmDialog
-        isOpen={openDeleteDialog}
+        isOpen={isDeleteDialogOpen}
         isLoading={false}
-        onClose={() => setOpenDialog(false)}
-        onConfirm={handleConfirm}
-        title="Delete Task"
-        description={`Are you sure you want to delete ${taskCode}`}
-        confirmText="Delete"
-        cancelText="Cancel"
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleDelete}
+        title="Are you sure?"
+        description="This action cannot be undone. This will permanently delete the item."
       />
     </>
   );

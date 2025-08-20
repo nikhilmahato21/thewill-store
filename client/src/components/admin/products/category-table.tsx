@@ -1,49 +1,57 @@
 import { FC, useState } from "react";
-import { getColumns } from "./table/columns";
+// Create this file
 import { DataTable } from "./table/table";
-import { useParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+import { X, Plus } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-import useTaskTableFilter from "@/hooks/use-task-table-filter";
+import { CategoryType } from "@/types/api.type";
+import useCategoryTableFilter from "@/hooks/use-category-table-filter";
+import { getCategoryColumns } from "./table/category-columns";
 
-type Filters = ReturnType<typeof useTaskTableFilter>[0];
-type SetFilters = ReturnType<typeof useTaskTableFilter>[1];
+type Filters = ReturnType<typeof useCategoryTableFilter>[0];
+type SetFilters = ReturnType<typeof useCategoryTableFilter>[1];
 
 interface DataTableFilterToolbarProps {
   isLoading?: boolean;
-  projectId?: string;
   filters: Filters;
   setFilters: SetFilters;
+  onAddCategory?: () => void;
 }
 
-const CategoryTable = () => {
-  const param = useParams();
-  const projectId = param.projectId as string;
+interface CategoryTableProps {
+  categories?: CategoryType[];
+}
 
+const CategoryTable: FC<CategoryTableProps> = ({ categories }) => {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
-  const [filters, setFilters] = useTaskTableFilter();
-  const columns = getColumns(projectId);
+  const [filters, setFilters] = useCategoryTableFilter();
+  const columns = getCategoryColumns(); // Use category-specific columns
 
-  const totalCount = 0;
+  const totalCount = categories?.length ?? 0;
+  const isLoading = false;
 
   const handlePageChange = (page: number) => {
     setPageNumber(page);
   };
 
-  // Handle page size changes
   const handlePageSizeChange = (size: number) => {
     setPageSize(size);
   };
 
+  const handleAddCategory = () => {
+    // TODO: Open add category modal or navigate to add category page
+    console.log("Add new category");
+  };
+
   return (
     <div className="w-full relative">
-      <DataTable
-        isLoading={false}
-        data={[]}
+      <DataTable<CategoryType, unknown>
+        isLoading={isLoading}
+        data={categories ?? []}
         columns={columns}
         onPageChange={handlePageChange}
         onPageSizeChange={handlePageSizeChange}
@@ -54,10 +62,10 @@ const CategoryTable = () => {
         }}
         filtersToolbar={
           <DataTableFilterToolbar
-            isLoading={false}
-            projectId={projectId}
+            isLoading={isLoading}
             filters={filters}
             setFilters={setFilters}
+            onAddCategory={handleAddCategory}
           />
         }
       />
@@ -67,67 +75,92 @@ const CategoryTable = () => {
 
 const DataTableFilterToolbar: FC<DataTableFilterToolbarProps> = ({
   isLoading,
-  projectId,
   filters,
   setFilters,
+  onAddCategory,
 }) => {
-  //const workspaceId = useWorkspaceId();
-
-  //Workspace Projects
-  //const projectOptions = [];
-
-  // Workspace Memebers
-  //const assignees = []
-
-  const handleFilterChange = (key: keyof Filters, values: string[]) => {
+  const handleFilterChange = (key: keyof Filters, value: string | null) => {
     setFilters({
       ...filters,
-      [key]: values.length > 0 ? values.join(",") : null,
+      [key]: value,
     });
   };
 
+  const hasActiveFilters = Object.values(filters).some(
+    (value) => value !== null && value !== ""
+  );
+
   return (
-    <div className="flex flex-col lg:flex-row w-full items-start space-y-2 mb-2 lg:mb-0 lg:space-x-2  lg:space-y-0">
-      <Input
-        placeholder="Filter categories..."
-        value={filters.keyword || ""}
-        onChange={(e) =>
-          setFilters({
-            keyword: e.target.value,
-          })
-        }
-        className="h-8 w-full lg:w-[250px]"
-      />
-      
+    <div className="flex flex-col lg:flex-row w-full items-start space-y-2 mb-4 lg:mb-0 lg:space-x-2 lg:space-y-0">
+      <div className="flex flex-1 flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-2">
+        <Input
+          placeholder="Search categories..."
+          value={filters.search || ""}
+          onChange={(e) =>
+            handleFilterChange("search", e.target.value || null)
+          }
+          className="h-8 w-full lg:w-[250px]"
+        />
 
-      
-      
-
-      
-      
-
-
-      {Object.values(filters).some(
-        (value) => value !== null && value !== ""
-      ) && (
-        <Button
-          disabled={isLoading}
-          variant="ghost"
-          className="h-8 px-2 lg:px-3"
-          onClick={() =>
-            setFilters({
-              keyword: null,
-              status: null,
-              priority: null,
-              projectId: null,
-              assigneeId: null,
-            })
+        <Select
+          value={filters.status || ""}
+          onValueChange={(value) =>
+            handleFilterChange("status", value === "all" ? null : value)
           }
         >
-          Reset
-          <X />
-        </Button>
-      )}
+          <SelectTrigger className="h-8 w-full lg:w-[150px]">
+            <SelectValue placeholder="Status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Status</SelectItem>
+            <SelectItem value="active">Active</SelectItem>
+            <SelectItem value="inactive">Inactive</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select
+          value={filters.parentCategory || ""}
+          onValueChange={(value) =>
+            handleFilterChange("parentCategory", value === "all" ? null : value)
+          }
+        >
+          <SelectTrigger className="h-8 w-full lg:w-[150px]">
+            <SelectValue placeholder="Parent Category" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Categories</SelectItem>
+            <SelectItem value="root">Root Categories</SelectItem>
+            <SelectItem value="subcategory">Subcategories</SelectItem>
+          </SelectContent>
+        </Select>
+
+        {hasActiveFilters && (
+          <Button
+            disabled={isLoading}
+            variant="ghost"
+            className="h-8 px-2 lg:px-3"
+            onClick={() =>
+              setFilters({
+                search: null,
+                status: null,
+                parentCategory: null,
+              })
+            }
+          >
+            Reset
+            <X className="ml-2 h-4 w-4" />
+          </Button>
+        )}
+      </div>
+
+      <Button
+        onClick={onAddCategory}
+        className="h-8 px-3"
+        size="sm"
+      >
+        <Plus className="mr-2 h-4 w-4" />
+        Add Category
+      </Button>
     </div>
   );
 };
