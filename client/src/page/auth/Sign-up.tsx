@@ -151,59 +151,7 @@ const SignUp = () => {
                     </div>
                     <div className="text-center text-sm">
                       Already have an account?{" "}
-                      <Link to="/sign-in                      backend/
-                        src/
-                          @types/
-                          config/
-                            app.config.ts
-                            database.config.ts
-                            passport.config.ts
-                          controllers/
-                            auth.controller.ts
-                          enums/
-                            role.enum.ts
-                            account-provider.enum.ts
-                          middlewares/
-                            asyncHandler.middleware.ts
-                            errorHandler.middleware.ts
-                          models/
-                            account.model.ts
-                            user.model.ts
-                          routes/
-                            auth.route.ts
-                          services/
-                            auth.service.ts
-                          utils/
-                            appError.ts
-                            bcrypt.ts
-                          validation/
-                            auth.validation.ts                            backend/
-                              src/
-                                @types/
-                                config/
-                                  app.config.ts
-                                  database.config.ts
-                                  passport.config.ts
-                                controllers/
-                                  auth.controller.ts
-                                enums/
-                                  role.enum.ts
-                                  account-provider.enum.ts
-                                middlewares/
-                                  asyncHandler.middleware.ts
-                                  errorHandler.middleware.ts
-                                models/
-                                  account.model.ts
-                                  user.model.ts
-                                routes/
-                                  auth.route.ts
-                                services/
-                                  auth.service.ts
-                                utils/
-                                  appError.ts
-                                  bcrypt.ts
-                                validation/
-                                  auth.validation.ts" className="underline underline-offset-4">
+                      <Link to="/sign-in" className="underline underline-offset-4">
                         Sign in
                       </Link>
                     </div>

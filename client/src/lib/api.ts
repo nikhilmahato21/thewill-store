@@ -1,3 +1,4 @@
+
 import { API, ECOM_API } from "./axios-client";
 import {
   CategoryType,
@@ -56,5 +57,26 @@ export const getAllCategoriesQueryFn = async (): Promise<CategoryType[]> => {
   } catch (error) {
     console.error('Error fetching categories:', error);
     throw error;
+  }
+};
+
+export const createCategoryMutationFn = async (formData: FormData) => {
+  console.log("Creating category with data:", formData);
+  for (let [key, value] of formData.entries()) {
+  console.log(key, value);
+}
+  try {
+    const response = await ECOM_API.post("/admin/category/create-category", formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response?.data;
+  } catch (error: any) {
+    // Handle specific error cases if needed
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    }
+    throw new Error("Failed to create category");
   }
 };
