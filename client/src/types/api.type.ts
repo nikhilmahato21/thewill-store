@@ -29,12 +29,7 @@ export type UserType = {
   lastLogin: null;
   createdAt: Date;
   updatedAt: Date;
-  currentWorkspace: {
-    _id: string;
-    name: string;
-    owner: string;
-    inviteCode: string;
-  };
+  
 };
 
 export type CurrentUserResponseType = {

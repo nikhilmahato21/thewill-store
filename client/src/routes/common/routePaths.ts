@@ -11,7 +11,6 @@ export const AUTH_ROUTES = {
 export const PROTECTED_ROUTES = {
   DASHBOARD: "/dashboard",
   ADD_PRODUCT: "/add-product",
-  
   PRODUCTS: "/products",
   CREATE_CATEGORY: "/category/add",
   CATEGORIES:"/all-categories",

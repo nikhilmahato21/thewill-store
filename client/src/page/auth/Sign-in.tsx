@@ -58,7 +58,7 @@ const SignIn = () => {
         // Always redirect to dashboard after login
         console.log("Login successful:", data);
         
-        navigate("/account");
+        navigate("/dashboard");
       },
       onError: (error) => {
         toast({
