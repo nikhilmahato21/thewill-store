@@ -4,7 +4,7 @@ import useAuth from "@/hooks/api/use-auth";
 import { UserType} from "@/types/api.type";
 
 import { useNavigate } from "react-router-dom";
-import { PermissionType } from "@/constant";
+
 
 // Define the context shape
 type AuthContextType = {
