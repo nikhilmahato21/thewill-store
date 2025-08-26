@@ -6,10 +6,12 @@ import {
 
 export type loginType = { email: string; password: string };
 export type LoginResponseType = {
+  success: boolean;
   message: string;
-  user: {
-    _id: string;
-    currentWorkspace: string;
+  data: {
+    roles: string[];
+    email: string;
+    username: string;
   };
 };
 
@@ -21,20 +23,21 @@ export type registerType = {
 
 // USER TYPE
 export type UserType = {
-  _id: string;
-  name: string;
+  userId: string;
+  username: string;
   email: string;
   profilePicture: string | null;
   isActive: true;
-  lastLogin: null;
   createdAt: Date;
   updatedAt: Date;
+  roles?: string[]; // Added roles field
   
 };
 
 export type CurrentUserResponseType = {
   message: string;
-  user: UserType;
+  success: boolean;
+  data: UserType;
 };
 
 //******** */ WORLSPACE TYPES ****************

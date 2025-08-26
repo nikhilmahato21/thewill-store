@@ -81,18 +81,18 @@ const Asidebar = () => {
                       <Avatar className="h-8 w-8 rounded-full">
                         <AvatarImage
                           src={user?.profilePicture || ""}
-                          alt={user?.name}
+                          alt={user?.username}
                           
                         />
                         <AvatarFallback className="rounded-full border border-gray-500">
-                          {user?.name?.split(" ")?.[0].charAt(0).toUpperCase() || "T"}
-                           {user?.name?.split(" ")?.[0].charAt(1).toUpperCase() || "T"}
+                          {user?.username?.split(" ")?.[0].charAt(0).toUpperCase() || "T"}
+                           {user?.username?.split(" ")?.[0].charAt(1).toUpperCase() || "T"}
                         </AvatarFallback>
                            <AvatarImage/>
                       </Avatar>
                       <div className="grid flex-1 text-left text-sm leading-tight">
                         <span className="truncate font-semibold">
-                          {user?.name || "User Name"}
+                          {user?.username || "User Name"}
                         </span>
                         <span className="truncate text-xs">
                           {user?.email || "example@gmail.com"}

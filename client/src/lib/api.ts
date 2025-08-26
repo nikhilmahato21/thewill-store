@@ -10,7 +10,7 @@ import {
 export const loginMutationFn = async (
   data: loginType
 ): Promise<LoginResponseType> => {
-  const response = await API.post("/auth/login", data);
+  const response = await ECOM_API.post("/auth/user/login", data);
   return response.data;
 };
 
@@ -23,7 +23,7 @@ export const logoutMutationFn = async () => await API.post("/auth/logout")  ;
 
 export const getCurrentUserQueryFn =
   async (): Promise<CurrentUserResponseType> => {
-    const response = await API.get(`/user/current`);
+    const response = await ECOM_API.get(`/auth/user/validate-token`);
     return response.data;
   };
 
@@ -37,7 +37,7 @@ export const getProductsQueryFn = async () => {
 
 export const getAllCategoriesQueryFn = async (): Promise<CategoryType[]> => {
   try {
-    const response = await ECOM_API.get("/public/category/all-categories"); 
+    const response = await ECOM_API.get("/aladdin/public/category/all-categories"); 
     console.log(response?.data);
     
     return response?.data?.data || [];
@@ -50,7 +50,7 @@ export const getAllCategoriesQueryFn = async (): Promise<CategoryType[]> => {
 
 export const createCategoryMutationFn = async (formData: FormData) => {
   try {
-    const response = await ECOM_API.post("/admin/category/create-category", formData, {
+    const response = await ECOM_API.post("/admin/create-category", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

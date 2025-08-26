@@ -4,7 +4,7 @@ import { Navigate, Outlet } from "react-router-dom";
 const ProtectedRoute = () => {
 
   const {data:authData,isLoading} = useAuth();
- const user = authData?.user;
+ const user = authData?.data;
 
  if(isLoading){
   return <DashboardSkeleton/>
