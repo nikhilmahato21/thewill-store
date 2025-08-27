@@ -274,7 +274,7 @@ export type CategoryType = {
   title: string; // Changed from 'name' to 'title'
   description?: string;
   slug?: string; // Made optional since it's not in your API response
-  banner?: string[]; // Added banner field as array of strings
+  banner?: string; // Added banner field as array of strings
   categoryId: string; // Added categoryId field
   parentCategory?: string | null;
   subCategories?: CategoryType[] | null; // Added subCategories field
@@ -287,7 +287,7 @@ export type CategoryType = {
 export type CreateCategoryPayloadType = {
   title: string; // Changed from 'name' to 'title'
   description?: string;
-  banner?: string[]; // Changed from 'image' to 'banner'
+  banner?: string; // Changed from 'image' to 'banner'
   parentCategory?: string;
 };
 

@@ -1,6 +1,7 @@
 import { API, ECOM_API } from "./axios-client";
 import {
   CategoryType,
+  CreateCategoryPayloadType,
   CurrentUserResponseType,
   LoginResponseType,
   loginType,
@@ -48,17 +49,26 @@ export const getAllCategoriesQueryFn = async (): Promise<CategoryType[]> => {
   }
 };
 
-export const createCategoryMutationFn = async (formData: FormData) => {
+export const createCategoryMutationFn = async (data:CreateCategoryPayloadType) => {
+
+  console.log("Form Data entries:" ,data);
+  
   try {
-    const response = await ECOM_API.post("/admin/create-category", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const response = await ECOM_API.post("/aladdin/admin/category/create-category", data);
     return response?.data;
   } catch (error: any) {
     console.log("Error creating category:", error);
     
     throw new Error("Failed to create category");
+  }
+};
+
+export const uploadMediaMutationFn = async (formData: FormData) => {
+  try {
+    const response = await ECOM_API.post("/aladdin/admin/media/upload-media", formData);
+    return response?.data;
+  } catch (error: any) {
+    console.log("Error uploading media:", error);
+    throw new Error("Failed to upload media");
   }
 };

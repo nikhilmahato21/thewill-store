@@ -139,21 +139,17 @@ export const getCategoryColumns = (): ColumnDef<CategoryType>[] => {
       ),
       cell: ({ row }) => {
         const banner = row.original.banner;
-        const hasImages = banner && banner.length > 0;
+        const hasImages = banner ;
         return (
           <div className="flex space-x-2">
             {hasImages ? (
               <div className="flex items-center space-x-2">
                 <img
-                  src={banner[0]}
+                  src={banner}
                   alt="Category banner"
                   className="w-8 h-8 rounded object-cover"
                 />
-                {banner.length > 1 && (
-                  <Badge variant="secondary" className="text-xs">
-                    +{banner.length - 1}
-                  </Badge>
-                )}
+                
               </div>
             ) : (
               <span className="text-muted-foreground text-sm">No image</span>

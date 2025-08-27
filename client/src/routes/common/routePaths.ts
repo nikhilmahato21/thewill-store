@@ -6,6 +6,7 @@ export const AUTH_ROUTES = {
   SIGN_IN: "/sign-in",
   SIGN_UP: "/sign-up",
   GOOGLE_OAUTH_CALLBACK: "/auth/google/callback",
+  
 };
 
 export const PROTECTED_ROUTES = {
