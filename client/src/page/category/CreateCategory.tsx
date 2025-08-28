@@ -367,67 +367,79 @@ const {
                   <Command>
                     <CommandInput placeholder="Search..." className="h-9" />
                     <CommandList>
-                      <CommandEmpty>No result found.</CommandEmpty>
-                      {categoriesData?.map((cat) => (
-                        <CommandGroup key={cat.categoryId}>
-                          {/* Category as selectable */}
-                          <CommandItem
-                            value={cat.title}
-                            onSelect={() => {
-                              form.setValue("parentCategoryId", cat.categoryId);
-                              setParentCategoryTitle(cat.title);
-                              setOpen(false);
-                            }}
-                            className="text-muted-foreground px-2 py-1.5 text-xs font-medium tracking-wide flex justify-between items-center"
-                          >
-                            {cat.title}
-                            <Check
-                              className={cn(
-                                "ml-auto h-4 w-4",
-                                parentCategoryId === cat.categoryId
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
-                          </CommandItem>
-
-                          {/* Subcategories with parent category shown */}
-                          {cat?.subCategories?.map((sub) => (
-                            <CommandItem
-                              key={sub.categoryId}
-                              value={`${cat.title} ${sub.title}`}
-                              onSelect={() => {
-                                form.setValue(
-                                  "parentCategoryId",
-                                  sub.categoryId
-                                );
-                                setParentCategoryTitle(
-                                  `${cat.title} → ${sub.title}`
-                                );
-                                setOpen(false);
-                              }}
-                              className="pl-6 flex flex-col items-start"
-                            >
-                              <div className="flex justify-between items-center w-full">
-                                <div className="flex flex-col">
-                                  <span className="text-xs text-muted-foreground opacity-60">
-                                    {cat.title}
-                                  </span>
-                                  <span className="text-sm">{sub.title}</span>
-                                </div>
+                      {isLoading ? (
+                        <div className="p-4 text-center text-sm text-muted-foreground">
+                          Loading categories...
+                        </div>
+                      ) : isError ? (
+                        <div className="p-4 text-center text-sm text-red-500">
+                          Error loading categories
+                        </div>
+                      ) : (
+                        <>
+                          <CommandEmpty>No result found.</CommandEmpty>
+                          {categoriesData?.map((cat) => (
+                            <CommandGroup key={cat.categoryId}>
+                              {/* Category as selectable */}
+                              <CommandItem
+                                value={cat.title}
+                                onSelect={() => {
+                                  form.setValue("parentCategoryId", cat.categoryId);
+                                  setParentCategoryTitle(cat.title);
+                                  setOpen(false);
+                                }}
+                                className="text-muted-foreground px-2 py-1.5 text-xs font-medium tracking-wide flex justify-between items-center"
+                              >
+                                {cat.title}
                                 <Check
                                   className={cn(
                                     "ml-auto h-4 w-4",
-                                    parentCategoryId === sub.categoryId
+                                    parentCategoryId === cat.categoryId
                                       ? "opacity-100"
                                       : "opacity-0"
                                   )}
                                 />
-                              </div>
-                            </CommandItem>
+                              </CommandItem>
+
+                              {/* Subcategories with parent category shown */}
+                              {cat?.subCategories?.map((sub) => (
+                                <CommandItem
+                                  key={sub.categoryId}
+                                  value={`${cat.title} ${sub.title}`}
+                                  onSelect={() => {
+                                    form.setValue(
+                                      "parentCategoryId",
+                                      sub.categoryId
+                                    );
+                                    setParentCategoryTitle(
+                                      `${cat.title} → ${sub.title}`
+                                    );
+                                    setOpen(false);
+                                  }}
+                                  className="pl-6 flex flex-col items-start"
+                                >
+                                  <div className="flex justify-between items-center w-full">
+                                    <div className="flex flex-col">
+                                      <span className="text-xs text-muted-foreground opacity-60">
+                                        {cat.title}
+                                      </span>
+                                      <span className="text-sm">{sub.title}</span>
+                                    </div>
+                                    <Check
+                                      className={cn(
+                                        "ml-auto h-4 w-4",
+                                        parentCategoryId === sub.categoryId
+                                          ? "opacity-100"
+                                          : "opacity-0"
+                                      )}
+                                    />
+                                  </div>
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
                           ))}
-                        </CommandGroup>
-                      ))}
+                        </>
+                      )}
                     </CommandList>
                   </Command>
                 </PopoverContent>

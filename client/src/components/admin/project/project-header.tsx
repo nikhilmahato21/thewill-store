@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useParams } from "react-router-dom";
-import CreateTaskDialog from "../products/create-task-dialog";
+import CreateTaskDialog from "../products/edit-category-dialog";
 import EditProjectDialog from "./edit-project-dialog";
 
 const ProjectHeader = () => {

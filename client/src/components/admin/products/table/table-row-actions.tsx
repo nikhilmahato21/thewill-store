@@ -12,22 +12,34 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ConfirmDialog } from "@/components/resuable/confirm-dialog";
-import { TaskType, CategoryType } from "@/types/api.type";
+import { CategoryType } from "@/types/api.type";
+import EditCategoryDialog from "../edit-category-dialog";
 
 interface DataTableRowActionsProps {
-  row: Row<TaskType | CategoryType>;
+  row: Row< CategoryType>;
 }
 
 export function DataTableRowActions({ row }: DataTableRowActionsProps) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  
+  console.log("Row data:", row.original);
+  
   const handleEdit = () => {
-    console.log("Edit item:", row.original);
+    setIsEditDialogOpen(true);
   };
 
   const handleDelete = () => {
     console.log("Delete item:", row.original);
     setIsDeleteDialogOpen(false);
+  };
+
+  // Check if the row is a CategoryType to get the ID
+  const getCategoryId = () => {
+    if ('id' in row.original) {
+      return (row.original as CategoryType)._id;
+    }
+    return undefined;
   };
 
   return (
@@ -54,6 +66,13 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      {isEditDialogOpen && (
+        <EditCategoryDialog
+          category={row?.original}
+          onClose={() => setIsEditDialogOpen(false)}
+        />
+      )}
 
       <ConfirmDialog
         isOpen={isDeleteDialogOpen}

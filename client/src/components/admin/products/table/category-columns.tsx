@@ -80,23 +80,6 @@ export const getCategoryColumns = (): ColumnDef<CategoryType>[] => {
       },
     },
     {
-      accessorKey: "subCategories",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Subcategories" />
-      ),
-      cell: ({ row }) => {
-        const subCategories = row.original.subCategories;
-        const count = subCategories?.length || 0;
-        return (
-          <div className="flex space-x-2">
-            <Badge variant="secondary" className="rounded-full">
-              {count}
-            </Badge>
-          </div>
-        );
-      },
-    },
-    {
       accessorKey: "categoryProducts",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Products" />
