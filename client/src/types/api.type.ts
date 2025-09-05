@@ -277,7 +277,7 @@ export type CategoryType = {
   banner?: string; // Added banner field as array of strings
   categoryId: string; // Added categoryId field
   parentCategory?: string | null;
-  subCategories?: CategoryType[] | null; // Added subCategories field
+  subCategories?: CategoryType[] ; // Added subCategories field
   categoryProducts?: any[] | null; // Added categoryProducts field
   isActive?: boolean; // Made optional since it's not in your API response
   createdAt?: string; // Made optional since it's not in your API response

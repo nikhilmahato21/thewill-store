@@ -23,7 +23,7 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   
-  console.log("Row data:", row.original);
+ 
   
   const handleEdit = () => {
     setIsEditDialogOpen(true);
